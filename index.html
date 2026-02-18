@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday Lovey ❤️</title>
+<title>Happy Birthday Lovey! ❤️</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-  /* --- CSS STYLES --- */
-  * { box-sizing: border-box; }
+  /* --- RESET & BASICS --- */
+  * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
   
   body {
     margin: 0;
@@ -16,9 +16,9 @@
     background: linear-gradient(135deg, #ff9acb, #ffb6c1, #ffd6eb);
     background-size: 400% 400%;
     animation: gradientBG 10s ease infinite;
-    min-height: 100vh;
-    overflow: hidden; 
-    color: #fff;
+    height: 100vh; /* Fixed height */
+    overflow: hidden; /* Prevent body scroll, we scroll the container instead */
+    color: #4a4a4a;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,340 +31,469 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Main Box */
+  /* --- FLOATING BACKGROUND HEARTS --- */
+  .bg-hearts {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .bg-heart {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 20px;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    from { transform: translateY(110vh) rotate(0deg); }
+    to { transform: translateY(-10vh) rotate(360deg); }
+  }
+
+  /* --- MAIN CONTAINER (SCROLL FIXED HERE) --- */
   .container {
     position: relative;
     z-index: 10;
     width: 90%;
-    max-width: 400px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 25px;
-    padding: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    max-height: 90vh;
-    overflow-y: auto;
+    max-width: 420px;
+    
+    /* SCROLL FIX STARTS HERE */
+    max-height: 90vh; /* Limits height to 90% of screen */
+    overflow-y: auto; /* Allows scrolling inside the box */
+    /* Hide scrollbar for Chrome/Safari/Opera */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    /* SCROLL FIX ENDS HERE */
+
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 30px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    transition: height 0.3s ease;
+  }
+  
+  /* Hide scrollbar for Chrome/Safari/Opera */
+  .container::-webkit-scrollbar {
+    display: none;
   }
 
-  h1 {
+  h1, h2 {
     font-family: 'Fredoka One', cursive;
     color: #ff4fa3;
-    text-shadow: 2px 2px 0px #fff;
-    font-size: 26px;
-    margin-bottom: 15px;
+    margin: 0 0 15px 0;
   }
+  
+  p { font-size: 18px; line-height: 1.5; color: #666; margin-bottom: 20px; }
 
+  /* --- BUTTONS --- */
   .btn {
-    padding: 12px 25px;
-    font-size: 16px;
+    padding: 12px 30px;
+    font-size: 18px;
     border: none;
     border-radius: 50px;
-    background: #fff;
-    color: #ff4fa3;
+    background: linear-gradient(45deg, #ff4fa3, #ff7eb3);
+    color: #fff;
     font-weight: bold;
     font-family: 'Fredoka One', cursive;
-    box-shadow: 0 5px 15px rgba(255, 79, 163, 0.4);
+    box-shadow: 0 5px 15px rgba(255, 79, 163, 0.3);
     cursor: pointer;
     margin: 10px;
-    transition: transform 0.2s ease, background 0.2s; /* Smooth movement */
-    position: relative; /* Important for the new movement logic */
+    transition: transform 0.2s, box-shadow 0.2s;
   }
-  .btn:active { transform: scale(0.9); }
-
-  /* The Sneaky No Button */
+  .btn:active { transform: scale(0.95); }
+  .btn-secondary { background: #800020; color: #ff4fa3; }
+  
   #noBtn {
-    background: #ff6b6b;
-    color: white;
-  }
-
-  .hidden { display: none; }
-
-  /* --- GAME 1: Love Meter --- */
-  .progress-container {
-    width: 100%;
-    height: 20px;
-    background: rgba(255,255,255,0.5);
-    border-radius: 10px;
-    margin: 15px 0;
-    border: 2px solid white;
-    overflow: hidden;
-  }
-  #progressBar {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #ff4fa3, #ff7eb3);
-    transition: width 0.2s;
-  }
-  .tap-heart {
-    font-size: 60px;
-    cursor: pointer;
-    animation: pulse 1.5s infinite;
-  }
-  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-
-  /* --- REVEAL 1: Photo --- */
-  #photo-container {
-    width: 70%;
-    margin: 10px auto;
-    background: white;
-    padding: 8px;
-    border-radius: 10px;
-    transform: rotate(-3deg);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  }
-  #photo { width: 100%; border-radius: 5px; display: block; }
-
-  /* --- GAME 2: Catch Hearts --- */
-  #game2-area {
-    position: relative;
-    height: 200px;
-    border: 2px dashed #fff;
-    border-radius: 15px;
-    overflow: hidden;
-    margin-bottom: 15px;
-    background: rgba(255,255,255,0.1);
-  }
-  .falling-heart {
     position: absolute;
-    font-size: 25px;
-    cursor: pointer;
-    animation: fallDown 3s linear forwards;
-  }
-  @keyframes fallDown { from { top: -30px; } to { top: 220px; } }
-
-  /* --- GAME 3: Unlock Gift --- */
-  #gift-box {
-    font-size: 80px;
-    cursor: pointer;
-    transition: transform 0.1s;
-    user-select: none;
-  }
-  .shake { animation: shakeAnim 0.5s; }
-  @keyframes shakeAnim {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(10deg); }
-    50% { transform: rotate(-10deg); }
-    75% { transform: rotate(10deg); }
-    100% { transform: rotate(0deg); }
+    transition: 0.1s ease; 
   }
 
-  /* --- MESSAGES --- */
+  /* --- IMAGES & POLAROID STYLE --- */
+  .photo-frame {
+    background: white;
+    padding: 10px 10px 30px 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    transform: rotate(-2deg);
+    margin: 20px auto;
+    width: 80%;
+    border-radius: 5px;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .photo-frame img { width: 100%; border-radius: 3px; display: block; }
+  .photo-caption { font-family: 'Fredoka One', cursive; color: #ccc; margin-top: 10px; font-size: 14px;}
+
+  @keyframes popIn { from { transform: scale(0) rotate(0deg); } to { transform: scale(1) rotate(-2deg); } }
+
+  /* --- GAME 1: BALLOONS --- */
+  #balloon-container {
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.3);
+    margin-bottom: 15px;
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+  .balloon {
+    position: absolute;
+    width: 40px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    animation: floatBalloon 4s linear infinite;
+    bottom: -60px;
+  }
+  .balloon::before {
+    content: ''; position: absolute; bottom: -10px;
+    width: 2px; height: 10px; background: rgba(0,0,0,0.2);
+  }
+  @keyframes floatBalloon { 0% { bottom: -60px; } 100% { bottom: 300px; } }
+
+  /* --- GAME 2: MEMORY CARDS --- */
+  .memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .card {
+    background: #ff7eb3;
+    height: 60px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: transparent;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .card.flipped { background: #fff; color: #000; transform: rotateY(180deg); }
+  .card.matched { background: #fff; color: #ff4fa3; visibility: hidden; opacity: 0; transition: 0.5s; }
+
+  /* --- GAME 3: CAKE --- */
+  .cake-container {
+    position: relative;
+    width: 200px;
+    height: 150px;
+    margin: 50px auto 20px auto;
+  }
+  .cake-base {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 60px;
+    background: #f8a5c2; border-radius: 10px 10px 0 0;
+  }
+  .cake-middle {
+    position: absolute; bottom: 60px; left: 10px; width: 180px; height: 50px;
+    background: #f78fb3; border-radius: 10px 10px 0 0;
+  }
+  .candle {
+    position: absolute; width: 10px; height: 30px; background: repeating-linear-gradient(45deg, #fff, #fff 5px, #74b9ff 5px, #74b9ff 10px);
+    bottom: 110px; cursor: pointer;
+  }
+  .flame {
+    position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+    width: 12px; height: 18px; background: orange; border-radius: 50% 50% 20% 20%;
+    opacity: 0; transition: opacity 0.3s;
+    animation: flicker 0.5s infinite alternate;
+  }
+  .flame.lit { opacity: 1; box-shadow: 0 0 10px orange; }
+  @keyframes flicker { from { transform: translateX(-50%) scale(1); } to { transform: translateX(-50%) scale(1.1); } }
+
+  /* --- UTILITIES --- */
+  .hidden { display: none !important; }
+  .fade-in { animation: fadeIn 0.8s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
   .message-box {
     background: rgba(255,255,255,0.8);
-    color: #d63384;
-    padding: 15px;
-    border-radius: 15px;
-    text-align: left;
-    font-size: 16px;
-    margin-top: 15px;
-    max-height: 200px;
-    overflow-y: auto;
     border: 2px dashed #ff9acb;
-    white-space: pre-wrap; 
-    line-height: 1.5;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: left;
+    margin-top: 15px;
+    white-space: pre-wrap; /* Keeps lines */
+    font-size: 16px;
+    color: #d63384;
   }
 
 </style>
 </head>
 <body>
 
-<div class="container">
+<!-- Animated Background -->
+<div class="bg-hearts" id="bg-hearts"></div>
 
-  <!-- HEADER -->
-  <h1 id="main-title">Happy Birthday Lovey 🎂</h1>
+<div class="container fade-in">
 
-  <!-- SECTION 1: YES / NO -->
-  <div id="section-1">
-    <p>May surprise me sayooo!</p>
-    <p>Gusto mo makita?</p>
-    <div style="margin-top: 20px;">
-        <button class="btn" onclick="goToSection(2)">Yes! 💕</button>
-        <!-- On mobile, 'mouseover' doesn't work well, so 'onclick' handles the jump -->
-        <button class="btn" id="noBtn" onclick="moveNo()">Ayaw 😢</button>
+  <!-- SECTION 1: WELCOME -->
+  <div id="step-1">
+    <h1>Hi Birthday Girl! 🎂</h1>
+    <p>May surprise ako sayo lovey... <br>Ready kana?</p>
+    <div style="position: relative; height: 80px;">
+      <button class="btn" onclick="nextStep(2)">YES! 😍</button>
+      <button class="btn btn-secondary" id="noBtn" onmouseover="moveNo()" onclick="moveNo()">Ayoko (ge) 🤬</button>
     </div>
   </div>
 
-  <!-- SECTION 2: GAME 1 (Love Meter) -->
-  <div id="section-2" class="hidden">
-    <p>Step 1: Fill the Love Meter! <br><small>(Bilisan mo pag pindot!!!)</small></p>
-    <div class="progress-container">
-      <div id="progressBar"></div>
+  <!-- SECTION 2: BALLOON GAME -->
+  <div id="step-2" class="hidden">
+    <h2>Mission 1: Pop the Balloons! 🎈</h2>
+    <p>Pindutin mo ballons, sasabog yan hehe</p>
+    <div id="balloon-container"></div>
+    <p id="balloon-score">Popped: 0 / 5</p>
+  </div>
+
+  <!-- SECTION 3: PHOTO REVEAL 1 -->
+  <div id="step-3" class="hidden">
+    <div class="photo-frame">
+      <!-- REPLACE 'photo1.jpg' WITH YOUR IMAGE -->
+      <img src="photo1.jpg" onerror="this.src='https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400'" alt="Memory 1">
+      <div class="photo-caption">My beautiful Princess ❤️</div>
     </div>
-    <div class="tap-heart" onclick="tapMeter()">💖</div>
+    <div class="message-box" id="msg-1"></div>
+    <button class="btn" onclick="nextStep(4)">Taraa di pa to tapos ➡️</button>
   </div>
 
-  <!-- SECTION 3: SHORT MESSAGE & PHOTO -->
-  <div id="section-3" class="hidden">
-    <div id="photo-container">
-      <!-- REPLACE WITH YOUR PHOTO -->
-      <img id="photo" src="photo.jpg" alt="Us" onerror="this.src='https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=400'">
+  <!-- SECTION 4: MEMORY GAME -->
+  <div id="step-4" class="hidden">
+    <h2>Mission 2: Match the Pairs! 🧠</h2>
+    <p>ahm, i match match mo lang yung mga ano, puzzle to heart to heart (like us)</p>
+    <div class="memory-grid" id="memory-grid"></div>
+  </div>
+
+  <!-- SECTION 5: PHOTO REVEAL 2 -->
+  <div id="step-5" class="hidden">
+    <div class="photo-frame">
+      <!-- REPLACE 'photo2.jpg' WITH YOUR IMAGE -->
+      <img src="photo2.jpg" onerror="this.src='https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=400'" alt="Memory 2">
+      <div class="photo-caption">Still My Fav Pic 📸</div>
     </div>
-    <div id="msg-box-1" class="message-box"></div> 
-    <button id="next-btn-1" class="btn hidden" onclick="goToSection(4)">Wait, marami pa hehehe... 👇</button>
+    <div class="message-box" id="msg-2"></div>
+    <button class="btn" onclick="nextStep(6)">Isa paaaa! ➡️</button>
   </div>
 
-  <!-- SECTION 4: GAME 2 (Catch Hearts) -->
-  <div id="section-4" class="hidden">
-    <p>Step 2: Catch 10 Falling Kisses! (Kiss ko) 💋</p>
-    <h2 id="score-board">0 / 10</h2>
-    <div id="game2-area"></div>
+  <!-- SECTION 6: CAKE GAME -->
+  <div id="step-6" class="hidden">
+    <h2>Final Mission: Make a Wish! 🕯️</h2>
+    <p>Etooo cakeeeeee, ahm pailawin mo na, pindutin mo lang mga candles hihi</p>
+    
+    <div class="cake-container">
+      <div class="cake-base"></div>
+      <div class="cake-middle"></div>
+      <!-- Candles -->
+      <div class="candle" style="left: 30px;" onclick="lightCandle(this)">
+        <div class="flame"></div>
+      </div>
+      <div class="candle" style="left: 95px;" onclick="lightCandle(this)">
+        <div class="flame"></div>
+      </div>
+      <div class="candle" style="left: 160px;" onclick="lightCandle(this)">
+        <div class="flame"></div>
+      </div>
+    </div>
+    <h3 id="cake-msg" style="opacity:0; transition:1s;">Happy Birthday!!! 🎉</h3>
   </div>
 
-  <!-- SECTION 5: GAME 3 (Unwrap Gift) -->
-  <div id="section-5" class="hidden">
-    <p>Last Step: Iopen mo yung gift!! 🎁<br><small>(Keep tapping to open hihihi)</small></p>
-    <div id="gift-box" onclick="tapGift()">🎁</div>
-  </div>
-
-  <!-- SECTION 6: FINAL MESSAGE -->
-  <div id="section-6" class="hidden">
-    <h2>Happy Birthday Baby! 🎉</h2>
-    <div id="final-msg-box" class="message-box"></div>
-    <p style="margin-top:20px;">I Love You! ❤️</p>
+  <!-- SECTION 7: FINAL REVEAL -->
+  <div id="step-7" class="hidden">
+    <div class="photo-frame" style="transform: rotate(2deg);">
+      <!-- REPLACE 'photo3.jpg' WITH YOUR IMAGE -->
+      <img src="photo3.jpg" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400'" alt="Memory 3">
+    </div>
+    <h1>I Love Youuuuuuuuuuuuuu! ❤️</h1>
+    <div class="message-box" id="msg-final"></div>
+    <br>
+    <button class="btn" onclick="alert('Kiss me now! 😘')">Claim Your Kiss (pindutin mo em) 💋</button>
+    <br><br><br>
   </div>
 
 </div>
 
 <script>
-  // --- MESSAGES ---
-  const shortMessage = "Hi lovey, happy birthday!! I love you so much! Nagustuhan mo baaaaa? Hehehe. Ginagawa ko to while naglalaba bag, hoping na magustuhan ng baby ko. Anyways, baby, i love love youuu, i'm sorry po na lagi kitang inaawayyy, and sinasaktan, ahm  ilove you. 💕";
+  /* --- CONFIGURATION --- */
+  const messages = {
+    1: "Hi lovey, happy birthday!! I love you so much! Nagustuhan mo baaaaa? Hehehe. Ginagawa ko to while naglalaba bag, hoping na magustuhan ng baby ko. Anyways, baby, i love love youuu, i'm sorry po na lagi kitang inaawayyy, and sinasaktan, ahm  ilove you. 💕",
+    2: "Remember mo ba tooo, ang ganda ganda mo ditooooo, i have always told you na napaka ganda ng baby ko. Even when I am far, you shine so brightly to the point na naiinlove ako kahit andito lang ako. Ang galing mo sumayaw ditoooooo, i am shocked at how amazing my baby is!!!!!! ang talented mo for me, and love. I am upset, kasi minsan sinasabi mong hindi ka matalino. Sino ba nagpapa baba ng confidence mo???? tsk! I love you!!!",
+    final: "baby!! Surprise!!! 🎉 Another long message para sayoooooo, and:  Happy happy birthday! Enjoy your special day, my love!  simpleng website lang para sa minamahal kooooo. 3 years na tayo at lalo kapang gumaganda at paganda ng paganda tsk. I promise to always be here for you, to support you, and to love you no matter what, i love you so muuchh. I love you to the moon and back! ❤️❤️❤️ ❤️"
 
-  const finalMessage = `Hello baby!! Surprise!!! 🎉
+  };
 
-Another long message para sayoooooo, and:
+  /* --- GLOBAL STATE --- */
+  let currentStep = 1;
 
-Happy happy birthday! simpleng website lang para sa minamahal kooooo.
-3 years na tayo at lalo kapang gumaganda at paganda ng paganda tsk.
+  /* --- INITIALIZATION --- */
+  window.onload = function() {
+    createFloatingHearts();
+  };
 
-I promise to always be here for you, to support you, and to love you no matter what, i love you so muuchh.
-Enjoy your special day, my love! 
+  function nextStep(step) {
+    document.querySelectorAll('[id^="step-"]').forEach(el => el.classList.add('hidden'));
+    document.getElementById(`step-${step}`).classList.remove('hidden');
+    document.getElementById(`step-${step}`).classList.add('fade-in');
+    
+    currentStep = step;
 
-I love you to the moon and back! ❤️❤️❤️`;
+    if (step === 2) startBalloonGame();
+    if (step === 3) typeText('msg-1', messages[1]);
+    if (step === 4) setupMemoryGame();
+    if (step === 5) typeText('msg-2', messages[2]);
+    if (step === 7) {
+      typeText('msg-final', messages.final);
+      startConfetti();
+    }
+  }
 
-  // --- VARIABLES ---
-  let meterProgress = 0;
-  let catchScore = 0;
-  let giftClicks = 0;
-  const totalGiftClicks = 10;
-  let giftOpened = false; 
-
-  // --- UPDATED NO BUTTON LOGIC ---
+  /* --- NO BUTTON LOGIC --- */
   function moveNo() {
     const btn = document.getElementById('noBtn');
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 200 - 100;
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+  }
+
+  /* --- GAME 1: BALLOONS --- */
+  let balloonsPopped = 0;
+  function startBalloonGame() {
+    const container = document.getElementById('balloon-container');
+    const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
     
-    // Generate a random number between -80 and 80
-    const randomX = Math.floor(Math.random() * 160) - 80;
-    const randomY = Math.floor(Math.random() * 160) - 80;
-
-    // Apply the translation
-    btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
-  }
-
-  // --- NAVIGATION ---
-  function goToSection(num) {
-    document.querySelectorAll('.container > div[id^="section-"]').forEach(el => el.classList.add('hidden'));
-    document.getElementById('section-' + num).classList.remove('hidden');
-
-    if (num === 4) startGame2();
-    if (num === 6) typeFinalMessage();
-  }
-
-  // GAME 1: METER
-  function tapMeter() {
-    meterProgress += 10;
-    document.getElementById('progressBar').style.width = meterProgress + "%";
-    if (meterProgress >= 100) {
-      goToSection(3);
-      typeText('msg-box-1', shortMessage, () => {
-        document.getElementById('next-btn-1').classList.remove('hidden');
-      });
-    }
-  }
-
-  // GAME 2: CATCH HEARTS
-  function startGame2() {
     const interval = setInterval(() => {
-      if (catchScore >= 10) {
+      if (balloonsPopped >= 5) {
         clearInterval(interval);
-        setTimeout(() => goToSection(5), 1000); 
+        setTimeout(() => nextStep(3), 500);
         return;
       }
-      spawnHeart();
-    }, 700);
+      
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      b.style.left = Math.random() * 80 + '%';
+      b.style.background = colors[Math.floor(Math.random() * colors.length)];
+      b.innerHTML = '🎈';
+      
+      b.onclick = function() {
+        this.style.transform = 'scale(1.5)';
+        this.style.opacity = '0';
+        balloonsPopped++;
+        document.getElementById('balloon-score').innerText = `Popped: ${balloonsPopped} / 5`;
+        setTimeout(() => this.remove(), 200);
+      };
+
+      container.appendChild(b);
+      setTimeout(() => { if(b.parentNode) b.remove(); }, 4000);
+    }, 600);
   }
 
-  function spawnHeart() {
-    const area = document.getElementById('game2-area');
-    const heart = document.createElement('div');
-    heart.className = 'falling-heart';
-    heart.innerHTML = '💋';
-    heart.style.left = Math.random() * 90 + "%";
-    
-    heart.onclick = function() {
-      catchScore++;
-      document.getElementById('score-board').innerText = catchScore + " / 10";
-      heart.innerHTML = "✨";
-      setTimeout(() => heart.remove(), 200);
-    };
+  /* --- GAME 2: MEMORY --- */
+  const cardsArray = ['❤️','❤️','🌹','🌹','🧸','🧸','✨','✨'];
+  let flippedCards = [];
+  let matchedPairs = 0;
 
-    area.appendChild(heart);
-    setTimeout(() => { if(heart.parentNode) heart.remove(); }, 3000);
+  function setupMemoryGame() {
+    const grid = document.getElementById('memory-grid');
+    grid.innerHTML = '';
+    cardsArray.sort(() => 0.5 - Math.random());
+
+    cardsArray.forEach((emoji, index) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.emoji = emoji;
+      card.dataset.index = index;
+      card.onclick = flipCard;
+      grid.appendChild(card);
+    });
   }
 
-  // GAME 3: UNWRAP GIFT
-  function tapGift() {
-    if (giftOpened) return; 
+  function flipCard() {
+    if (flippedCards.length < 2 && !this.classList.contains('flipped')) {
+      this.classList.add('flipped');
+      this.innerText = this.dataset.emoji;
+      flippedCards.push(this);
 
-    giftClicks++;
-    const gift = document.getElementById('gift-box');
-    gift.classList.remove('shake');
-    void gift.offsetWidth; 
-    gift.classList.add('shake');
-
-    if (giftClicks >= totalGiftClicks) {
-      giftOpened = true; 
-      gift.innerHTML = "💥";
-      setTimeout(() => goToSection(6), 500);
-    }
-  }
-
-  // --- TYPING ENGINE ---
-  function typeText(elementId, text, callback) {
-    const box = document.getElementById(elementId);
-    box.innerHTML = ""; 
-    let i = 0;
-
-    function type() {
-      if (i < text.length) {
-        box.innerHTML += text.charAt(i);
-        i++;
-        setTimeout(type, 40); 
-      } else if (callback) {
-        callback();
+      if (flippedCards.length === 2) {
+        setTimeout(checkMatch, 600);
       }
     }
-    type();
   }
 
-  function typeFinalMessage() {
-    setInterval(createConfetti, 200);
-    typeText('final-msg-box', finalMessage);
+  function checkMatch() {
+    const [c1, c2] = flippedCards;
+    if (c1.dataset.emoji === c2.dataset.emoji) {
+      c1.classList.add('matched');
+      c2.classList.add('matched');
+      matchedPairs++;
+      if (matchedPairs === 4) setTimeout(() => nextStep(5), 500);
+    } else {
+      c1.classList.remove('flipped');
+      c1.innerText = '';
+      c2.classList.remove('flipped');
+      c2.innerText = '';
+    }
+    flippedCards = [];
   }
 
-  // CONFETTI
-  function createConfetti() {
-    const c = document.createElement('div');
-    c.style.position = 'absolute';
-    c.style.width = '10px';
-    c.style.height = '10px';
-    c.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
-    c.style.top = '-10px';
-    c.style.left = Math.random() * 100 + 'vw';
-    c.style.zIndex = '0';
-    c.style.animation = `fallDown ${Math.random()*2+3}s linear`;
-    document.body.appendChild(c);
-    setTimeout(() => c.remove(), 4000);
+  /* --- GAME 3: CAKE --- */
+  let candlesLit = 0;
+  function lightCandle(el) {
+    const flame = el.querySelector('.flame');
+    if (!flame.classList.contains('lit')) {
+      flame.classList.add('lit');
+      candlesLit++;
+      if (candlesLit === 3) {
+        document.getElementById('cake-msg').style.opacity = '1';
+        setTimeout(() => nextStep(7), 2000);
+      }
+    }
+  }
+
+  /* --- UTILS --- */
+  function typeText(id, text) {
+    const el = document.getElementById(id);
+    el.innerHTML = '';
+    let i = 0;
+    const interval = setInterval(() => {
+      el.innerHTML += text.charAt(i);
+      i++;
+      if (i >= text.length) clearInterval(interval);
+    }, 30);
+  }
+
+  function createFloatingHearts() {
+    const bg = document.getElementById('bg-hearts');
+    for (let i = 0; i < 15; i++) {
+      const h = document.createElement('div');
+      h.className = 'bg-heart';
+      h.innerHTML = '❤️';
+      h.style.left = Math.random() * 100 + '%';
+      h.style.animationDuration = (Math.random() * 3 + 5) + 's';
+      h.style.animationDelay = Math.random() * 5 + 's';
+      bg.appendChild(h);
+    }
+  }
+
+  function startConfetti() {
+    setInterval(() => {
+      const c = document.createElement('div');
+      c.style.position = 'fixed';
+      c.style.top = '-10px';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.width = '10px';
+      c.style.height = '10px';
+      c.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
+      c.style.animation = `floatBalloon 3s linear`;
+      c.style.zIndex = '999';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 3000);
+    }, 100);
   }
 
 </script>
