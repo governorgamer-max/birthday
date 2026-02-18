@@ -67,7 +67,8 @@
     box-shadow: 0 5px 15px rgba(255, 79, 163, 0.4);
     cursor: pointer;
     margin: 10px;
-    transition: transform 0.1s;
+    transition: transform 0.2s ease, background 0.2s; /* Smooth movement */
+    position: relative; /* Important for the new movement logic */
   }
   .btn:active { transform: scale(0.9); }
 
@@ -75,8 +76,6 @@
   #noBtn {
     background: #ff6b6b;
     color: white;
-    position: relative; /* Starts normal, becomes fixed when moved */
-    transition: transform 0.2s ease;
   }
 
   .hidden { display: none; }
@@ -162,7 +161,7 @@
     max-height: 200px;
     overflow-y: auto;
     border: 2px dashed #ff9acb;
-    white-space: pre-wrap; /* Keeps lines correctly */
+    white-space: pre-wrap; 
     line-height: 1.5;
   }
 
@@ -181,7 +180,8 @@
     <p>Gusto mo makita?</p>
     <div style="margin-top: 20px;">
         <button class="btn" onclick="goToSection(2)">Yes! 💕</button>
-        <button class="btn" id="noBtn" onmouseover="moveNo()" onclick="moveNo()">Ayaw 😢</button>
+        <!-- On mobile, 'mouseover' doesn't work well, so 'onclick' handles the jump -->
+        <button class="btn" id="noBtn" onclick="moveNo()">Ayaw 😢</button>
     </div>
   </div>
 
@@ -197,7 +197,7 @@
   <!-- SECTION 3: SHORT MESSAGE & PHOTO -->
   <div id="section-3" class="hidden">
     <div id="photo-container">
-      <!-- REPLACE WITH YOUR PHOTO 'photo.jpg' -->
+      <!-- REPLACE WITH YOUR PHOTO -->
       <img id="photo" src="photo.jpg" alt="Us" onerror="this.src='https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=400'">
     </div>
     <div id="msg-box-1" class="message-box"></div> 
@@ -228,10 +228,8 @@
 
 <script>
   // --- MESSAGES ---
-  
   const shortMessage = "Hi lovey, happy birthday!! I love you so much! Nagustuhan mo baaaaa? Hehehe. Ginagawa ko to while naglalaba bag, hoping na magustuhan ng baby ko. Anyways, baby, i love love youuu, i'm sorry po na lagi kitang inaawayyy, and sinasaktan, ahm  ilove you. 💕";
 
-  // IMPORTANT: Keep the backticks (`) and you can press Enter for new lines
   const finalMessage = `Hello baby!! Surprise!!! 🎉
 
 Another long message para sayoooooo, and:
@@ -249,23 +247,18 @@ I love you to the moon and back! ❤️❤️❤️`;
   let catchScore = 0;
   let giftClicks = 0;
   const totalGiftClicks = 10;
-  let giftOpened = false; // Flag to prevent double glitches
+  let giftOpened = false; 
 
-  // --- NO BUTTON LOGIC ---
-  let noScale = 1;
+  // --- UPDATED NO BUTTON LOGIC ---
   function moveNo() {
     const btn = document.getElementById('noBtn');
-    noScale -= 0.1;
-    if (noScale < 0) noScale = 0;
     
-    // Teleport to random spot
-    const x = Math.random() * (window.innerWidth);
-    const y = Math.random() * (window.innerHeight);
-    
-    btn.style.position = 'fixed';
-    btn.style.left = x + 'px';
-    btn.style.top = y + 'px';
-    btn.style.transform = `scale(${noScale})`;
+    // Generate a random number between -80 and 80
+    const randomX = Math.floor(Math.random() * 160) - 80;
+    const randomY = Math.floor(Math.random() * 160) - 80;
+
+    // Apply the translation
+    btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
   }
 
   // --- NAVIGATION ---
@@ -321,7 +314,7 @@ I love you to the moon and back! ❤️❤️❤️`;
 
   // GAME 3: UNWRAP GIFT
   function tapGift() {
-    if (giftOpened) return; // Stop if already opened
+    if (giftOpened) return; 
 
     giftClicks++;
     const gift = document.getElementById('gift-box');
@@ -330,7 +323,7 @@ I love you to the moon and back! ❤️❤️❤️`;
     gift.classList.add('shake');
 
     if (giftClicks >= totalGiftClicks) {
-      giftOpened = true; // LOCK IT so it only runs once
+      giftOpened = true; 
       gift.innerHTML = "💥";
       setTimeout(() => goToSection(6), 500);
     }
@@ -346,7 +339,7 @@ I love you to the moon and back! ❤️❤️❤️`;
       if (i < text.length) {
         box.innerHTML += text.charAt(i);
         i++;
-        setTimeout(type, 40); // Speed of typing
+        setTimeout(type, 40); 
       } else if (callback) {
         callback();
       }
@@ -377,4 +370,3 @@ I love you to the moon and back! ❤️❤️❤️`;
 </script>
 </body>
 </html>
-
