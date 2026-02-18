@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ❤️</title>
+
+<style>
+body {
+    margin:0;
+    font-family: Arial;
+    background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+    text-align:center;
+    color:white;
+}
+
+.container {
+    margin-top: 40%;
+}
+
+button {
+    padding: 15px 25px;
+    font-size: 18px;
+    border:none;
+    border-radius: 20px;
+    background:white;
+    color:#ff6b81;
+}
+
+.hidden {
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Happy Birthday My Love 🎂</h1>
+
+<p id="message">Tap the button below...</p>
+
+<button onclick="showMessage()">Open Surprise</button>
+
+<div id="surprise" class="hidden">
+    <h2>I Love You ❤️</h2>
+    <p>
+    Thank you for coming into my life.<br>
+    You make everything brighter.<br><br>
+    I hope this birthday is as special as you are.
+    </p>
+</div>
+
+</div>
+
+<script>
+function showMessage(){
+    document.getElementById("surprise").style.display = "block";
+}
+</script>
+
+</body>
+</html>
