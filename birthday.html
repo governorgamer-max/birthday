@@ -1,63 +1,379 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday ❤️</title>
+<title>Happy Birthday Lovey ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-body {
-    margin:0;
-    font-family: Arial;
-    background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
-    text-align:center;
-    color:white;
-}
+  /* --- CSS STYLES --- */
+  * { box-sizing: border-box; }
+  
+  body {
+    margin: 0;
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #ff9acb, #ffb6c1, #ffd6eb);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+    min-height: 100vh;
+    overflow: hidden; 
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
-.container {
-    margin-top: 40%;
-}
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-button {
-    padding: 15px 25px;
-    font-size: 18px;
-    border:none;
-    border-radius: 20px;
-    background:white;
-    color:#ff6b81;
-}
+  /* Main Box */
+  .container {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
 
-.hidden {
-    display:none;
-}
+  h1 {
+    font-family: 'Fredoka One', cursive;
+    color: #ff4fa3;
+    text-shadow: 2px 2px 0px #fff;
+    font-size: 26px;
+    margin-bottom: 15px;
+  }
+
+  .btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 50px;
+    background: #fff;
+    color: #ff4fa3;
+    font-weight: bold;
+    font-family: 'Fredoka One', cursive;
+    box-shadow: 0 5px 15px rgba(255, 79, 163, 0.4);
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.1s;
+  }
+  .btn:active { transform: scale(0.9); }
+
+  /* The Sneaky No Button */
+  #noBtn {
+    background: #ff6b6b;
+    color: white;
+    position: relative; /* Starts normal, becomes fixed when moved */
+    transition: transform 0.2s ease;
+  }
+
+  .hidden { display: none; }
+
+  /* --- GAME 1: Love Meter --- */
+  .progress-container {
+    width: 100%;
+    height: 20px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 10px;
+    margin: 15px 0;
+    border: 2px solid white;
+    overflow: hidden;
+  }
+  #progressBar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #ff4fa3, #ff7eb3);
+    transition: width 0.2s;
+  }
+  .tap-heart {
+    font-size: 60px;
+    cursor: pointer;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+  /* --- REVEAL 1: Photo --- */
+  #photo-container {
+    width: 70%;
+    margin: 10px auto;
+    background: white;
+    padding: 8px;
+    border-radius: 10px;
+    transform: rotate(-3deg);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  #photo { width: 100%; border-radius: 5px; display: block; }
+
+  /* --- GAME 2: Catch Hearts --- */
+  #game2-area {
+    position: relative;
+    height: 200px;
+    border: 2px dashed #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    background: rgba(255,255,255,0.1);
+  }
+  .falling-heart {
+    position: absolute;
+    font-size: 25px;
+    cursor: pointer;
+    animation: fallDown 3s linear forwards;
+  }
+  @keyframes fallDown { from { top: -30px; } to { top: 220px; } }
+
+  /* --- GAME 3: Unlock Gift --- */
+  #gift-box {
+    font-size: 80px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    user-select: none;
+  }
+  .shake { animation: shakeAnim 0.5s; }
+  @keyframes shakeAnim {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    50% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  /* --- MESSAGES --- */
+  .message-box {
+    background: rgba(255,255,255,0.8);
+    color: #d63384;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: left;
+    font-size: 16px;
+    margin-top: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 2px dashed #ff9acb;
+    white-space: pre-wrap; /* Keeps lines correctly */
+    line-height: 1.5;
+  }
+
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-<h1>Happy Birthday My Love 🎂</h1>
+  <!-- HEADER -->
+  <h1 id="main-title">Happy Birthday Lovey 🎂</h1>
 
-<p id="message">Tap the button below...</p>
+  <!-- SECTION 1: YES / NO -->
+  <div id="section-1">
+    <p>May surprise me sayooo!</p>
+    <p>Gusto mo makita?</p>
+    <div style="margin-top: 20px;">
+        <button class="btn" onclick="goToSection(2)">Yes! 💕</button>
+        <button class="btn" id="noBtn" onmouseover="moveNo()" onclick="moveNo()">Ayaw 😢</button>
+    </div>
+  </div>
 
-<button onclick="showMessage()">Open Surprise</button>
+  <!-- SECTION 2: GAME 1 (Love Meter) -->
+  <div id="section-2" class="hidden">
+    <p>Step 1: Fill the Love Meter! <br><small>(Bilisan mo pag pindot!!!)</small></p>
+    <div class="progress-container">
+      <div id="progressBar"></div>
+    </div>
+    <div class="tap-heart" onclick="tapMeter()">💖</div>
+  </div>
 
-<div id="surprise" class="hidden">
-    <h2>I Love You ❤️</h2>
-    <p>
-    Thank you for coming into my life.<br>
-    You make everything brighter.<br><br>
-    I hope this birthday is as special as you are.
-    </p>
-</div>
+  <!-- SECTION 3: SHORT MESSAGE & PHOTO -->
+  <div id="section-3" class="hidden">
+    <div id="photo-container">
+      <!-- REPLACE WITH YOUR PHOTO 'photo.jpg' -->
+      <img id="photo" src="photo.jpg" alt="Us" onerror="this.src='https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=400'">
+    </div>
+    <div id="msg-box-1" class="message-box"></div> 
+    <button id="next-btn-1" class="btn hidden" onclick="goToSection(4)">Wait, marami pa hehehe... 👇</button>
+  </div>
+
+  <!-- SECTION 4: GAME 2 (Catch Hearts) -->
+  <div id="section-4" class="hidden">
+    <p>Step 2: Catch 10 Falling Kisses! (Kiss ko) 💋</p>
+    <h2 id="score-board">0 / 10</h2>
+    <div id="game2-area"></div>
+  </div>
+
+  <!-- SECTION 5: GAME 3 (Unwrap Gift) -->
+  <div id="section-5" class="hidden">
+    <p>Last Step: Iopen mo yung gift!! 🎁<br><small>(Keep tapping to open hihihi)</small></p>
+    <div id="gift-box" onclick="tapGift()">🎁</div>
+  </div>
+
+  <!-- SECTION 6: FINAL MESSAGE -->
+  <div id="section-6" class="hidden">
+    <h2>Happy Birthday Baby! 🎉</h2>
+    <div id="final-msg-box" class="message-box"></div>
+    <p style="margin-top:20px;">I Love You! ❤️</p>
+  </div>
 
 </div>
 
 <script>
-function showMessage(){
-    document.getElementById("surprise").style.display = "block";
-}
-</script>
+  // --- MESSAGES ---
+  
+  const shortMessage = "Hi lovey, happy birthday!! I love you so much! Nagustuhan mo baaaaa? Hehehe. Ginagawa ko to while naglalaba bag, hoping na magustuhan ng baby ko. Anyways, baby, i love love youuu, i'm sorry po na lagi kitang inaawayyy, and sinasaktan, ahm  ilove you. 💕";
 
+  // IMPORTANT: Keep the backticks (`) and you can press Enter for new lines
+  const finalMessage = `Hello baby!! Surprise!!! 🎉
+
+Another long message para sayoooooo, and:
+
+Happy happy birthday! simpleng website lang para sa minamahal kooooo.
+3 years na tayo at lalo kapang gumaganda at paganda ng paganda tsk.
+
+I promise to always be here for you, to support you, and to love you no matter what, i love you so muuchh.
+Enjoy your special day, my love! 
+
+I love you to the moon and back! ❤️❤️❤️`;
+
+  // --- VARIABLES ---
+  let meterProgress = 0;
+  let catchScore = 0;
+  let giftClicks = 0;
+  const totalGiftClicks = 10;
+  let giftOpened = false; // Flag to prevent double glitches
+
+  // --- NO BUTTON LOGIC ---
+  let noScale = 1;
+  function moveNo() {
+    const btn = document.getElementById('noBtn');
+    noScale -= 0.1;
+    if (noScale < 0) noScale = 0;
+    
+    // Teleport to random spot
+    const x = Math.random() * (window.innerWidth - 1);
+    const y = Math.random() * (window.innerHeight - 1);
+    
+    btn.style.position = 'fixed';
+    btn.style.left = x + 'px';
+    btn.style.top = y + 'px';
+    btn.style.transform = `scale(${noScale})`;
+  }
+
+  // --- NAVIGATION ---
+  function goToSection(num) {
+    document.querySelectorAll('.container > div[id^="section-"]').forEach(el => el.classList.add('hidden'));
+    document.getElementById('section-' + num).classList.remove('hidden');
+
+    if (num === 4) startGame2();
+    if (num === 6) typeFinalMessage();
+  }
+
+  // GAME 1: METER
+  function tapMeter() {
+    meterProgress += 10;
+    document.getElementById('progressBar').style.width = meterProgress + "%";
+    if (meterProgress >= 100) {
+      goToSection(3);
+      typeText('msg-box-1', shortMessage, () => {
+        document.getElementById('next-btn-1').classList.remove('hidden');
+      });
+    }
+  }
+
+  // GAME 2: CATCH HEARTS
+  function startGame2() {
+    const interval = setInterval(() => {
+      if (catchScore >= 10) {
+        clearInterval(interval);
+        setTimeout(() => goToSection(5), 1000); 
+        return;
+      }
+      spawnHeart();
+    }, 700);
+  }
+
+  function spawnHeart() {
+    const area = document.getElementById('game2-area');
+    const heart = document.createElement('div');
+    heart.className = 'falling-heart';
+    heart.innerHTML = '💋';
+    heart.style.left = Math.random() * 90 + "%";
+    
+    heart.onclick = function() {
+      catchScore++;
+      document.getElementById('score-board').innerText = catchScore + " / 10";
+      heart.innerHTML = "✨";
+      setTimeout(() => heart.remove(), 200);
+    };
+
+    area.appendChild(heart);
+    setTimeout(() => { if(heart.parentNode) heart.remove(); }, 3000);
+  }
+
+  // GAME 3: UNWRAP GIFT
+  function tapGift() {
+    if (giftOpened) return; // Stop if already opened
+
+    giftClicks++;
+    const gift = document.getElementById('gift-box');
+    gift.classList.remove('shake');
+    void gift.offsetWidth; 
+    gift.classList.add('shake');
+
+    if (giftClicks >= totalGiftClicks) {
+      giftOpened = true; // LOCK IT so it only runs once
+      gift.innerHTML = "💥";
+      setTimeout(() => goToSection(6), 500);
+    }
+  }
+
+  // --- TYPING ENGINE ---
+  function typeText(elementId, text, callback) {
+    const box = document.getElementById(elementId);
+    box.innerHTML = ""; 
+    let i = 0;
+
+    function type() {
+      if (i < text.length) {
+        box.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, 40); // Speed of typing
+      } else if (callback) {
+        callback();
+      }
+    }
+    type();
+  }
+
+  function typeFinalMessage() {
+    setInterval(createConfetti, 200);
+    typeText('final-msg-box', finalMessage);
+  }
+
+  // CONFETTI
+  function createConfetti() {
+    const c = document.createElement('div');
+    c.style.position = 'absolute';
+    c.style.width = '10px';
+    c.style.height = '10px';
+    c.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+    c.style.top = '-10px';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.zIndex = '0';
+    c.style.animation = `fallDown ${Math.random()*2+3}s linear`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+
+</script>
 </body>
 </html>
